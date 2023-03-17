@@ -18,11 +18,13 @@ h1, #nuevoBtn{
 .player,
 .dealer {
     width: 45%;
-    height: 300px;
+    display: flex;
     background-color: #fff;
     border: 1px solid #000;
     padding: 20px;
     text-align: center;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .player h2,

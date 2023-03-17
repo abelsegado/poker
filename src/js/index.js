@@ -77,7 +77,7 @@ function repartirCards() {
   for (let i = 0; i < 2; i++) {
     playerCards.push(deck.pop());
   }
-  renderCards();
+  repartirJugadorCards();
   return mostrarDeck();
 }
 
@@ -103,14 +103,12 @@ function tirarCards() {
 //     playerCards.push(deck.pop());
 //   }
 
-//   renderCards();
+//   repartirJugadorCards();
 // }
 
 // Función para renderizar las cartas en la interfaz de usuario
-function renderCards() {
+function repartirJugadorCards() {
   playerCardsElement.innerHTML = "";
-
-
 
   playerCards.forEach((card, index) => {
     const img = document.createElement("img");
@@ -120,23 +118,9 @@ function renderCards() {
     img.src = `assets/${card.suit}-${card.rank}.png`;
     img.alt = `${card.rank} of ${card.suit}`;
     console.log(card)
-    // img.dataset.index = index;
-    // if (card.selected) {
-    //   img.classList.add("selected");
-    // }
-    // img.addEventListener("click", () => {
-    //   card.selected = !card.selected;
-    //   renderCards();
-    // });
+
     playerCardsElement.appendChild(img);
   });
-
-  // tableCards.forEach((card, index) => {
-  //   const img = document.createElement("img");
-  //   img.src = `assets/${card.suit}-${card.rank}.png`;
-  //   img.alt = `${card.rank} of ${card.suit}`;
-  //   tableCardsElement.appendChild(img);
-  // });
 }
 // Función para iniciar el juego
 function init() {
