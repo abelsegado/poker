@@ -2,15 +2,15 @@
 // Variables de juego
 let deck = [];
 let playerCards = [];
-let dealerCards = [];
-let discardedCards = [];
+let tableCards = [];
 
 // Obtener los elementos de la interfaz de usuario
-const dealBtn = document.getElementById("dealBtn");
-const discardBtn = document.getElementById("discardBtn");
-const drawBtn = document.getElementById("drawBtn");
+const tirarBtn = document.getElementById("tirarBtn");
+const igualarBtn = document.getElementById("igualarBtn");
+const subirBtn = document.getElementById("subirBtn");
 const playerCardsElement = document.getElementById("playerCards");
-const dealerCardsElement = document.getElementById("dealerCards");
+const tableCardsElement = document.getElementById("tableCards");
+const nuevoBtn = document.getElementById("nuevoBtn");
 const ranks = [
   "2",
   "3",
@@ -28,9 +28,16 @@ const ranks = [
 ];
 const suits = ["spades", "clubs", "diamonds", "hearts"];
 
+// Partida Nueva
+function partidaNueva() {
+  deck = [];
+  playerCards = [];
+  tableCards = [];
+  init();
+}
+
 // Función para crear una baraja
 function createDeck() {
-  let deck = [];
 
   for (let i = 0; i < ranks.length; i++) {
     for (let j = 0; j < suits.length; j++) {
@@ -40,10 +47,9 @@ function createDeck() {
       });
     }
   }
-
-  console.log(deck);
   return deck;
 }
+
 // Función para mezclar la baraja
 function shuffleDeck() {
   for (let i = 0; i < deck.length; i++) {
@@ -52,89 +58,104 @@ function shuffleDeck() {
     deck[i] = deck[randomIndex];
     deck[randomIndex] = temp;
   }
-  console.log(deck);
+
+  return deck;
 }
 
+// Función mostrar mazo
+function mostrarDeck() {
+  return deck;
+}
+
+function mostrarPlayerDeck() {
+  return playerCards;
+}
 
 // Función para repartir las cartas
-function dealCards() {
-  playerCards = [];
-  dealerCards = [];
-  discardedCards = [];
+function repartirCards() {
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 2; i++) {
     playerCards.push(deck.pop());
-    dealerCards.push(deck.pop());
   }
-
   renderCards();
+  return mostrarDeck();
 }
 
-// Función para descartar cartas
-function discardCards() {
-  playerCards.forEach((card, index) => {
-    if (card.selected) {
-      discardedCards.push(playerCards.splice(index, 1)[0]);
-    }
+// Función para tirar cartas
+function tirarCards() {
+  playerCards=[];
+
+  playerCardsElement.querySelectorAll("img").forEach((img) => {
+    img.src = "assets/back.png";
   });
 
-  drawCards();
+  playerCardsElement.querySelectorAll("img").forEach((img, index) => {
+    img.classList.add("card", `card-${index}`);
+    img.classList.add(`rotate-${index % 2 === 0 ? "left" : "right"}`);
+    
+  });
 }
+
 
 // Función para sacar nuevas cartas
-function drawCards() {
-  while (playerCards.length < 5 && deck.length > 0) {
-    playerCards.push(deck.pop());
-  }
+// function drawCards() {
+//   while (playerCards.length < 5 && deck.length > 0) {
+//     playerCards.push(deck.pop());
+//   }
 
-  renderCards();
-}
+//   renderCards();
+// }
 
 // Función para renderizar las cartas en la interfaz de usuario
 function renderCards() {
   playerCardsElement.innerHTML = "";
-  dealerCardsElement.innerHTML = "";
+
+
 
   playerCards.forEach((card, index) => {
     const img = document.createElement("img");
+
+    img.classList.add("card");
+    // img.classList.add(`translate-${index % 2 === 0 ? "left" : "right"}`);
     img.src = `assets/${card.suit}-${card.rank}.png`;
     img.alt = `${card.rank} of ${card.suit}`;
-    img.dataset.index = index;
-    img.classList.add("card");
-    if (card.selected) {
-      img.classList.add("selected");
-    }
-    img.addEventListener("click", () => {
-      card.selected = !card.selected;
-      renderCards();
-    });
+    console.log(card)
+    // img.dataset.index = index;
+    // if (card.selected) {
+    //   img.classList.add("selected");
+    // }
+    // img.addEventListener("click", () => {
+    //   card.selected = !card.selected;
+    //   renderCards();
+    // });
     playerCardsElement.appendChild(img);
   });
 
-  dealerCards.forEach((card, index) => {
-    const img = document.createElement("img");
-    img.src = `assets/${card.suit}-${card.rank}.png`;
-    img.alt = `${card.rank} of ${card.suit}`;
-    dealerCardsElement.appendChild(img);
-  });
+  // tableCards.forEach((card, index) => {
+  //   const img = document.createElement("img");
+  //   img.src = `assets/${card.suit}-${card.rank}.png`;
+  //   img.alt = `${card.rank} of ${card.suit}`;
+  //   tableCardsElement.appendChild(img);
+  // });
 }
 // Función para iniciar el juego
 function init() {
-  // Crear la baraja
-  for (let i = 0; i < ranks.length; i++) {
-    for (let j = 0; j < suits.length; j++) {
-      deck.push({ rank: ranks[i], suit: suits[j] });
-    }
-  }
 
+  // Crear la baraja
+  createDeck();
   // Mezclar la baraja
   shuffleDeck();
+  // Repatir cartas
+  repartirCards();
+  // Mostrar Deck
+  mostrarDeck();
+  
 
-  // Asignar los eventos a los botones
-  dealBtn.addEventListener("click", dealCards);
-  discardBtn.addEventListener("click", discardCards);
-  drawBtn.addEventListener("click", drawCards);
 }
 
-// Iniciar el juego al cargar la página
-init();
+
+
+  // Asignar los eventos a los botones
+  nuevoBtn.addEventListener("click", partidaNueva);
+  tirarBtn.addEventListener("click", tirarCards);
+  // subirBtn.addEventListener("click", drawCards);
