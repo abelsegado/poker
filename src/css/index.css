@@ -84,21 +84,21 @@ button:hover {
     right: -50px;
 }
 
-.rotate-left {
-    transform: translateX(50px) translateY(-20px) rotate(-24deg)!important;
+.tirar-0 {
+    transform: translateX(50px) translateY(-20px) rotate(-24deg);
     
 }
 
-.rotate-right {
-    transform: translateX(-50px) translateY(-20px) rotate(18deg)!important;
+.tirar-1 {
+    transform: translateX(-50px) translateY(-20px) rotate(18deg);
 }
 
-.card-0{
-    transform: translateX(50px) rotate(0deg)!important;
+.no-tirar-0{
+    transform: translateX(50px) rotate(0deg);
 
 }
 
-.card-1 {
-    transform: translateX(-50px) rotate(0deg)!important;
+.no-tirar-1 {
+    transform: translateX(-50px) rotate(0deg);
 
 }
