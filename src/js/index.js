@@ -42,6 +42,16 @@ function partidaNueva() {
   init();
 }
 
+// Función mostrar mazo
+function mostrarDeck() {
+  return deck;
+}
+
+// Mostrar cartas jugador
+function mostrarPlayerDeck() {
+  return playerCards;
+}
+
 // Función para crear una baraja
 function createDeck() {
   for (let i = 0; i < ranks.length; i++) {
@@ -67,37 +77,23 @@ function shuffleDeck() {
   return deck;
 }
 
-// Función mostrar mazo
-function mostrarDeck() {
-  return deck;
-}
 
-// Mostrar cartas jugador
-function mostrarPlayerDeck() {
-  return playerCards;
-}
 
 // Función para repartir las cartas
-function repartirCards() {
+function repartirPlayerCards() {
   for (let i = 0; i < 2; i++) {
     playerCards.push(deck.pop());
   }
   renderizarJugadorCards();
 }
 
-// Función para tirar cartas
-function tirarCards() {
-  playerCards = [];
-  playerCardsElement.querySelectorAll("img").forEach((img) => {
-    img.src = "assets/back.png";
-  });
-  playerCardsElement.querySelectorAll("img").forEach((img, index) => {
-    // img.classList.remove(`card-${index}`);
-    img.classList.add(`rotate-${index % 2 === 0 ? "left" : "right"}`);
-  });
+function repartirTableCards() {
+  for (let i = 0; i < 2; i++) {
+    tableCards.push(deck.pop());
+  }
 }
 
-// Función para sacar nuevas cartas
+// Función para sacar nuevas 
 // function drawCards() {
 //   while (playerCards.length < 5 && deck.length > 0) {
 //     playerCards.push(deck.pop());
@@ -107,20 +103,38 @@ function tirarCards() {
 // }
 
 // Función para renderizar las cartas en la interfaz de usuario
+
+
 function renderizarJugadorCards() {
   playerCards.forEach((card, index) => {
     const img = playerCardsImages[index];
+    console.log(img);
     img.src = `assets/${card.suit}-${card.rank}.png`;
     img.alt = `${card.rank} of ${card.suit}`;
     img.style.opacity = 1;
     img.classList.add(`card-${index}`);
   });
 }
+
+// Función para tirar cartas
+function tirarCards() {
+  
+  playerCards.forEach((card, index) => {
+    const img = playerCardsImages[index];
+    console.log(img);
+    img.src = "assets/back.png";
+    img.alt = "back";
+    img.style.opacity = 1;
+    img.classList.remove(`card-${index}`);
+  });
+  playerCards = [];
+  desactivarButton();
+}
+
+
 // Función para iniciar el juego
 function init() {
   startGame = true;
-  console.log(startGame);
-  console.log("init");
   // Activar botones
   activarButton();
   // Crear la baraja
@@ -128,18 +142,23 @@ function init() {
   // Mezclar la baraja
   shuffleDeck();
   // Repatir cartas
-  repartirCards();
+  repartirPlayerCards();
   // Mostrar Deck
   mostrarDeck();
 }
 
 // Asignar los eventos a los botones
 startBtn.addEventListener("click", partidaNueva);
+
 function activarButton() {
-  
   botonesHijos.forEach((boton) => {
     boton.classList.remove("disabled");
   });
   tirarBtn.addEventListener("click", tirarCards);
-  
+}
+
+function desactivarButton() {
+  botonesHijos.forEach((boton) => {
+    boton.classList.add("disabled");
+  });
 }

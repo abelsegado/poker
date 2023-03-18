@@ -94,11 +94,11 @@ button:hover {
 }
 
 .card-0{
-    transform: translateX(50px);
+    transform: translateX(50px) rotate(0deg)!important;
 
 }
 
 .card-1 {
-    transform: translateX(-50px) ;
+    transform: translateX(-50px) rotate(0deg)!important;
 
 }
