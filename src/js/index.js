@@ -1,22 +1,35 @@
 // Variables de juego
 let deck = [];
-let playerCards = [];
+let playerCards1 = [];
+let playerCards2 = [];
 let tableCards = [];
 
 // Boobleanos de juego
 let startGame = false;
 
 // Obtener los elementos de la interfaz de usuario
-const tirarBtn = document.getElementById("tirarBtn");
-const igualarBtn = document.getElementById("igualarBtn");
-const subirBtn = document.getElementById("subirBtn");
-const playerCardsElement = document.getElementById("playerCards");
+const botones = document.querySelectorAll(".botonPlayer");
+
+const botonesTirar = document.querySelectorAll("#tirarBtn");
+const botonesIgualar = document.querySelectorAll("#igualarBtn");
+const botonesSubir = document.querySelectorAll("#subirBtn");
+
+const jugadores = document.querySelectorAll(".player");
+
+const playerCardsElement = document.getElementById("playerCards1");
 const playerCardsImages = playerCardsElement.querySelectorAll("img");
+const playerCards2Element = document.getElementById("playerCards2");
+const playerCards2Images = playerCards2Element.querySelectorAll("img");
+
 const tableCardsElement = document.getElementById("tableCards");
 const tableCardsImages = tableCardsElement.querySelectorAll("img");
+
 const startBtn = document.getElementById("startBtn");
-const botonesElement = document.querySelector(".botones");
-const botonesHijos = botonesElement.querySelectorAll("button");
+
+// const botonesElement = document.querySelector(".botones");
+// const botones = botonesElement.querySelectorAll("button");
+
+
 
 const ranks = [
   "2",
@@ -34,11 +47,19 @@ const ranks = [
   "A",
 ];
 const suits = ["spades", "clubs", "diamonds", "hearts"];
-
+// const funciones = [
+//   tirarCards,
+//   igualarBet,
+//   igualarBet,
+//   tirarCards2,
+//   igualarBet,
+//   igualarBet,
+// ];
 // Partida Nueva
 function partidaNueva() {
   deck = [];
-  playerCards = [];
+  playerCards1 = [];
+  playerCards2 = [];
   tableCards = [];
 
   init();
@@ -47,11 +68,6 @@ function partidaNueva() {
 // Función mostrar mazo
 function mostrarDeck() {
   return deck;
-}
-
-// Mostrar cartas jugador
-function mostrarPlayerDeck() {
-  return playerCards;
 }
 
 // Función para crear una baraja
@@ -79,12 +95,19 @@ function shuffleDeck() {
   return deck;
 }
 
-// Función para repartir las cartas
-function repartirPlayerCards() {
+// Función para repartir las cartas jugador1
+function repartirPlayer1Cards() {
   for (let i = 0; i < 2; i++) {
-    playerCards.push(deck.pop());
+    playerCards1.push(deck.pop());
   }
-  renderizarJugadorCards();
+  renderizarJugador1Cards();
+}
+// Función para repartir las cartas jugador2
+function repartirPlayer2Cards() {
+  for (let i = 0; i < 2; i++) {
+    playerCards2.push(deck.pop());
+  }
+  renderizarJugador2Cards();
 }
 // Funcion para repartir cartas a la mesa
 function repartirTableCards() {
@@ -96,9 +119,9 @@ function repartirTableCards() {
 
 // Eliminar visualmente cartas mesa
 function eliminarTableCards() {
-  tableCardsImages.forEach((img)=>{
-    img.style.display="none";
-  })
+  tableCardsImages.forEach((img) => {
+    img.style.display = "none";
+  });
 }
 
 // Función para igualar apuesta
@@ -109,8 +132,8 @@ function igualarBet() {
 
 // Función para sacar nuevas
 // function drawCards() {
-//   while (playerCards.length < 5 && deck.length > 0) {
-//     playerCards.push(deck.pop());
+//   while (playerCards1.length < 5 && deck.length > 0) {
+//     playerCards1.push(deck.pop());
 //   }
 
 //   renderizarJugadorCards();
@@ -118,9 +141,20 @@ function igualarBet() {
 
 // Función para renderizar las cartas en la interfaz de usuario
 
-function renderizarJugadorCards() {
-  playerCards.forEach((card, index) => {
+function renderizarJugador1Cards() {
+  playerCards1.forEach((card, index) => {
     const img = playerCardsImages[index];
+    img.src = `assets/${card.suit}-${card.rank}.png`;
+    img.alt = `${card.rank} of ${card.suit}`;
+    img.style.opacity = 1;
+    img.classList.remove(`tirar-${index}`);
+    img.classList.add(`no-tirar-${index}`);
+  });
+}
+
+function renderizarJugador2Cards() {
+  playerCards2.forEach((card, index) => {
+    const img = playerCards2Images[index];
     img.src = `assets/${card.suit}-${card.rank}.png`;
     img.alt = `${card.rank} of ${card.suit}`;
     img.style.opacity = 1;
@@ -141,7 +175,7 @@ function renderizarTableCards() {
 
 // Función para tirar cartas
 function tirarCards() {
-  playerCards.forEach((card, index) => {
+  playerCards1.forEach((card, index) => {
     const img = playerCardsImages[index];
     img.src = "assets/back.png";
     img.alt = "back";
@@ -149,7 +183,20 @@ function tirarCards() {
     img.classList.add(`tirar-${index}`);
     img.classList.remove(`no-tirar-${index}`);
   });
-  playerCards = [];
+  playerCards1 = [];
+  desactivarButton();
+}
+
+function tirarCards2() {
+  playerCards2.forEach((card, index) => {
+    const img = playerCards2Images[index];
+    img.src = "assets/back.png";
+    img.alt = "back";
+    img.style.opacity = 1;
+    img.classList.add(`tirar-${index}`);
+    img.classList.remove(`no-tirar-${index}`);
+  });
+  playerCards2 = [];
   desactivarButton();
 }
 
@@ -157,7 +204,7 @@ function tirarCards() {
 function init() {
   startGame = true;
   // Activar botones
-  activarButton();
+  activarButtons();
   // Crear la baraja
   createDeck();
   // Mezclar la baraja
@@ -165,25 +212,27 @@ function init() {
   // Eliminar cartas mesa
   eliminarTableCards();
   // Repatir cartas
-  repartirPlayerCards();
-
+  repartirPlayer1Cards();
+  // Repatir cartas
+  repartirPlayer2Cards();
 }
 
 // Asignar los eventos a los botones
 startBtn.addEventListener("click", partidaNueva);
 
-// Botones jugador
+// Activa los botones de todos los jugadores
 
-function activarButton() {
-  botonesHijos.forEach((boton) => {
-    boton.classList.remove("disabled");
+function activarButtons() {
+  botones.forEach((valor,key)=>{
+    botones[key].classList.remove("disabled");
   });
-  tirarBtn.addEventListener("click", tirarCards);
-  igualarBtn.addEventListener("click", igualarBet);
+  
 }
 
-function desactivarButton() {
-  botonesHijos.forEach((boton) => {
+function desactivarButtons() {
+  botones.forEach((boton, indice) => {
     boton.classList.add("disabled");
   });
 }
+
+// JUEGO
